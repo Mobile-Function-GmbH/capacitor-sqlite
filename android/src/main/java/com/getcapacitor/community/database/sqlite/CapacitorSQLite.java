@@ -2,10 +2,8 @@ package com.getcapacitor.community.database.sqlite;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-
 import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKey;
-
 import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.community.database.sqlite.SQLite.Database;
