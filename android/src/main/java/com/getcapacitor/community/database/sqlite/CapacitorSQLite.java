@@ -2,25 +2,20 @@ package com.getcapacitor.community.database.sqlite;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.text.TextUtils;
-import android.util.Log;
+
 import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKey;
-import androidx.security.crypto.MasterKeys;
+
 import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.community.database.sqlite.SQLite.Database;
 import com.getcapacitor.community.database.sqlite.SQLite.ImportExportJson.JsonSQLite;
 import com.getcapacitor.community.database.sqlite.SQLite.ImportExportJson.UtilsJson;
 import com.getcapacitor.community.database.sqlite.SQLite.UtilsFile;
-import com.getcapacitor.community.database.sqlite.SQLite.UtilsMigrate;
 import com.getcapacitor.community.database.sqlite.SQLite.UtilsSQLite;
 import com.getcapacitor.community.database.sqlite.SQLite.UtilsSecret;
 import java.io.File;
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Dictionary;
 import java.util.Enumeration;
@@ -38,7 +33,6 @@ public class CapacitorSQLite {
     private UtilsSQLite uSqlite = new UtilsSQLite();
     private UtilsFile uFile = new UtilsFile();
     private UtilsJson uJson = new UtilsJson();
-    private UtilsMigrate uMigrate = new UtilsMigrate();
     private UtilsSecret uSecret;
     private SharedPreferences sharedPreferences;
 
@@ -127,7 +121,6 @@ public class CapacitorSQLite {
      */
     public void createConnection(String dbName, boolean encrypted, String mode, int version, Dictionary<Integer, JSONObject> vUpgObject)
         throws Exception {
-        dbName = getDatabaseName(dbName);
         // check if connection already exists
         Database conn = dbDict.get(dbName);
         if (conn != null) {
@@ -135,7 +128,7 @@ public class CapacitorSQLite {
             throw new Exception(msg);
         }
         try {
-            Database db = new Database(context, dbName + "SQLite.db", encrypted, mode, version, vUpgObject, sharedPreferences);
+            Database db = new Database(context, dbName, encrypted, mode, version, vUpgObject, sharedPreferences);
             if (db != null) {
                 dbDict.put(dbName, db);
                 return;
@@ -154,7 +147,6 @@ public class CapacitorSQLite {
      * @throws Exception
      */
     public void open(String dbName) throws Exception {
-        dbName = getDatabaseName(dbName);
         Database db = dbDict.get(dbName);
         if (db != null) {
             try {
@@ -175,7 +167,6 @@ public class CapacitorSQLite {
      * @throws Exception
      */
     public void close(String dbName) throws Exception {
-        dbName = getDatabaseName(dbName);
         Database db = dbDict.get(dbName);
         if (db != null) {
             if (db.isOpen()) {
@@ -207,7 +198,6 @@ public class CapacitorSQLite {
      * @return Integer
      */
     public Integer getVersion(String dbName) throws Exception {
-        dbName = getDatabaseName(dbName);
         Database db = dbDict.get(dbName);
         if (db != null) {
             try {
@@ -228,7 +218,6 @@ public class CapacitorSQLite {
      * @throws Exception
      */
     public void closeConnection(String dbName) throws Exception {
-        dbName = getDatabaseName(dbName);
         Database db = dbDict.get(dbName);
         if (db != null) {
             if (db.isOpen()) {
@@ -297,8 +286,7 @@ public class CapacitorSQLite {
      * @throws Exception
      */
     public Boolean isDatabase(String dbName) {
-        dbName = getDatabaseName(dbName);
-        return uFile.isFileExists(context, dbName + "SQLite.db");
+        return uFile.isFileExists(context, dbName);
     }
 
     /**
@@ -308,7 +296,6 @@ public class CapacitorSQLite {
      * @throws Exception
      */
     public Boolean isTableExists(String dbName, String tableName) throws Exception {
-        dbName = getDatabaseName(dbName);
         Database db = dbDict.get(dbName);
         if (db != null) {
             boolean res = uJson.isTableExists(db, tableName);
@@ -339,55 +326,6 @@ public class CapacitorSQLite {
     }
 
     /**
-     * GetMigratableDbList
-     * @return JSArray
-     * @throws Exception
-     */
-    public JSArray getMigratableDbList(String folderPath) throws Exception {
-        String[] listFiles = uMigrate.getMigratableList(context, folderPath);
-        JSArray retArray = new JSArray();
-        for (String file : listFiles) {
-            retArray.put(file);
-        }
-        if (retArray.length() > 0) {
-            return retArray;
-        } else {
-            String msg = "No databases available ";
-            throw new Exception(msg);
-        }
-    }
-
-    /**
-     * AddSQLiteSuffix
-     * @param folderPath
-     * @throws Exception
-     */
-    public void addSQLiteSuffix(String folderPath, JSArray dbList) throws Exception {
-        try {
-            ArrayList<String> mDbList = uSqlite.stringJSArrayToArrayList(dbList);
-            uMigrate.addSQLiteSuffix(context, folderPath, mDbList);
-            return;
-        } catch (Exception e) {
-            throw new Exception(e.getMessage());
-        }
-    }
-
-    /**
-     *
-     * @param folderPath
-     * @throws Exception
-     */
-    public void deleteOldDatabases(String folderPath, JSArray dbList) throws Exception {
-        try {
-            ArrayList<String> mDbList = uSqlite.stringJSArrayToArrayList(dbList);
-            uMigrate.deleteOldDatabases(context, folderPath, mDbList);
-            return;
-        } catch (Exception e) {
-            throw new Exception(e.getMessage());
-        }
-    }
-
-    /**
      * Execute
      * @param dbName
      * @param statements
@@ -395,7 +333,6 @@ public class CapacitorSQLite {
      * @throws Exception
      */
     public JSObject execute(String dbName, String statements, Boolean transaction) throws Exception {
-        dbName = getDatabaseName(dbName);
         Database db = dbDict.get(dbName);
         if (db != null) {
             if (db.isOpen()) {
@@ -425,7 +362,6 @@ public class CapacitorSQLite {
      * @throws Exception
      */
     public JSObject executeSet(String dbName, JSArray set, Boolean transaction) throws Exception {
-        dbName = getDatabaseName(dbName);
         Database db = dbDict.get(dbName);
         if (db != null) {
             if (db.isOpen()) {
@@ -455,7 +391,6 @@ public class CapacitorSQLite {
      */
     public JSObject run(String dbName, String statement, JSArray values, Boolean transaction) throws Exception {
         JSObject res;
-        dbName = getDatabaseName(dbName);
         Database db = dbDict.get(dbName);
         if (db != null) {
             if (db.isOpen()) {
@@ -497,7 +432,6 @@ public class CapacitorSQLite {
      */
     public JSArray query(String dbName, String statement, JSArray values) throws Exception {
         JSArray res;
-        dbName = getDatabaseName(dbName);
         Database db = dbDict.get(dbName);
         if (db != null) {
             if (db.isOpen()) {
@@ -530,10 +464,9 @@ public class CapacitorSQLite {
     }
 
     public Boolean isDBExists(String dbName) throws Exception {
-        dbName = getDatabaseName(dbName);
         Database db = dbDict.get(dbName);
         if (db != null) {
-            File databaseFile = context.getDatabasePath(dbName + "SQLite.db");
+            File databaseFile = context.getDatabasePath(dbName);
             if (databaseFile.exists()) {
                 return true;
             } else {
@@ -546,7 +479,6 @@ public class CapacitorSQLite {
     }
 
     public Boolean isDBOpen(String dbName) throws Exception {
-        dbName = getDatabaseName(dbName);
         Database db = dbDict.get(dbName);
         if (db != null) {
             Boolean isOpen = db.isOpen();
@@ -562,11 +494,10 @@ public class CapacitorSQLite {
     }
 
     public void deleteDatabase(String dbName) throws Exception {
-        dbName = getDatabaseName(dbName);
         Database db = dbDict.get(dbName);
         if (db != null) {
             try {
-                db.deleteDB(dbName + "SQLite.db");
+                db.deleteDB(dbName);
                 return;
             } catch (Exception e) {
                 throw new Exception(e.getMessage());
@@ -578,7 +509,6 @@ public class CapacitorSQLite {
     }
 
     public JSObject createSyncTable(String dbName) throws Exception {
-        dbName = getDatabaseName(dbName);
         Database db = dbDict.get(dbName);
         if (db != null) {
             try {
@@ -594,7 +524,6 @@ public class CapacitorSQLite {
     }
 
     public void setSyncDate(String dbName, String syncDate) throws Exception {
-        dbName = getDatabaseName(dbName);
         Database db = dbDict.get(dbName);
         if (db != null) {
             try {
@@ -610,7 +539,6 @@ public class CapacitorSQLite {
     }
 
     public Long getSyncDate(String dbName) throws Exception {
-        dbName = getDatabaseName(dbName);
         Database db = dbDict.get(dbName);
         if (db != null) {
             try {
@@ -671,8 +599,7 @@ public class CapacitorSQLite {
                 String msg = "Stringify Json Object not Valid";
                 throw new Exception(msg);
             }
-            String dbName = getDatabaseName(jsonSQL.getDatabase());
-            dbName = new StringBuilder(dbName).append("SQLite.db").toString();
+            String dbName = jsonSQL.getDatabase();
             int dbVersion = jsonSQL.getVersion();
             //            jsonSQL.print();
             Boolean encrypted = jsonSQL.getEncrypted();
@@ -683,7 +610,7 @@ public class CapacitorSQLite {
             Database db = new Database(context, dbName, encrypted, inMode, dbVersion, new Hashtable<>(), sharedPreferences);
             db.open();
             if (!db.isOpen()) {
-                String msg = dbName + "SQLite.db not opened";
+                String msg = dbName + " not opened";
                 throw new Exception(msg);
             } else {
                 JSObject res = db.importFromJson(jsonSQL);
@@ -702,7 +629,6 @@ public class CapacitorSQLite {
     }
 
     public JSObject exportToJson(String dbName, String expMode) throws Exception {
-        dbName = getDatabaseName(dbName);
         Database db = dbDict.get(dbName);
         if (db != null) {
             try {
@@ -733,16 +659,6 @@ public class CapacitorSQLite {
             msg += e.getMessage();
             throw new Exception(msg);
         }
-    }
-
-    private String getDatabaseName(String dbName) {
-        String retName = dbName;
-
-        if (retName.endsWith(".db")) {
-            retName = retName.substring(0, retName.length() - 3);
-        }
-
-        return retName;
     }
 
     private void closeAllConnections() throws Exception {

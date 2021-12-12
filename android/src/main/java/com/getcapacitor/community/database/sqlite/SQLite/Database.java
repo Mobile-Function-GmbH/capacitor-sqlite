@@ -623,7 +623,7 @@ public class Database {
     public JSObject exportToJson(String mode) {
         JsonSQLite inJson = new JsonSQLite();
         JSObject retObj = new JSObject();
-        inJson.setDatabase(_dbName.substring(0, _dbName.length() - 9));
+        inJson.setDatabase(_dbName);
         inJson.setVersion(_version);
         inJson.setEncrypted(_encrypted);
         inJson.setMode(mode);
