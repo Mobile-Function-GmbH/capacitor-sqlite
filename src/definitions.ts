@@ -1,26 +1,4 @@
-//import { Capacitor } from '@capacitor/core';
-
-/**
- * CapacitorSQLitePlugin Interface
- */
 export interface CapacitorSQLitePlugin {
-  /**
-   * Initialize the web store
-   *
-   * @return Promise<void>
-   * @since 3.2.3-1
-   */
-
-  initWebStore(): Promise<void>;
-  /**
-   * Save database to  the web store
-   *
-   * @param options: capSQLiteOptions
-   * @return Promise<void>
-   * @since 3.2.3-1
-   */
-
-  saveToStore(options: capSQLiteOptions): Promise<void>;
   /**
    * Check if a passphrase exists in a secure store
    *
