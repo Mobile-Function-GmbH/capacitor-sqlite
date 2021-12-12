@@ -6,8 +6,6 @@ const CapacitorSQLite = registerPlugin<CapacitorSQLitePlugin>(
   'CapacitorSQLite',
   {
     web: () => import('./web').then(m => new m.CapacitorSQLiteWeb()),
-    electron: () =>
-      (window as any).CapacitorCustomPlatform.plugins.CapacitorSQLite,
   },
 );
 
