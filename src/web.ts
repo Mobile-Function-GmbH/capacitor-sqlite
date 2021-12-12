@@ -30,7 +30,6 @@ import type {
 export class CapacitorSQLiteWeb
   extends WebPlugin
   implements CapacitorSQLitePlugin {
-
   async echo(_options: capEchoOptions): Promise<capEchoResult> {
     throw new Error('Web platform is not supported.');
   }
@@ -43,14 +42,16 @@ export class CapacitorSQLiteWeb
     throw new Error('Web platform is not supported.');
   }
 
-  async changeEncryptionSecret(_options: capChangeSecretOptions): Promise<void> {
+  async changeEncryptionSecret(
+    _options: capChangeSecretOptions,
+  ): Promise<void> {
     throw new Error('Web platform is not supported.');
   }
 
   async createConnection(_options: capSQLiteOptions): Promise<void> {
     throw new Error('Web platform is not supported.');
   }
-  
+
   async open(_options: capSQLiteOptions): Promise<void> {
     throw new Error('Web platform is not supported.');
   }
@@ -111,7 +112,9 @@ export class CapacitorSQLiteWeb
     throw new Error('Web platform is not supported.');
   }
 
-  async isJsonValid(_options: capSQLiteImportOptions): Promise<capSQLiteResult> {
+  async isJsonValid(
+    _options: capSQLiteImportOptions,
+  ): Promise<capSQLiteResult> {
     throw new Error('Web platform is not supported.');
   }
 
