@@ -251,7 +251,7 @@ enum CapacitorSQLiteError: Error {
                     stmts = strcmds.joined(separator: "\n")
                 }
                 let res = try db.executeSQL(sql: stmts,
-                                             transaction: transaction)
+                                            transaction: transaction)
                 return ["changes": res]
             } catch DatabaseError.executeSQL(let message) {
                 throw CapacitorSQLiteError.failed(message: message)
@@ -324,7 +324,7 @@ enum CapacitorSQLiteError: Error {
                     }
                 }
                 let res = try db.runSQL(sql: statement, values: val,
-                                         transaction: transaction)
+                                        transaction: transaction)
                 return res
             } catch DatabaseError.runSQL(let message) {
                 throw CapacitorSQLiteError.failed(message: message)
