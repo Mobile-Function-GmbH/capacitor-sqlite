@@ -8,8 +8,6 @@
 
 <docgen-index>
 
-* [`initWebStore()`](#initwebstore)
-* [`saveToStore(...)`](#savetostore)
 * [`echo(...)`](#echo)
 * [`isSecretStored()`](#issecretstored)
 * [`setEncryptionSecret(...)`](#setencryptionsecret)
@@ -27,9 +25,6 @@
 * [`copyFromAssets(...)`](#copyfromassets)
 * [`isDatabase(...)`](#isdatabase)
 * [`getDatabaseList()`](#getdatabaselist)
-* [`getMigratableDbList(...)`](#getmigratabledblist)
-* [`addSQLiteSuffix(...)`](#addsqlitesuffix)
-* [`deleteOldDatabases(...)`](#deleteolddatabases)
 * [Interfaces](#interfaces)
 
 </docgen-index>
@@ -40,36 +35,6 @@
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 
 SQLiteConnection Interface
-
-### initWebStore()
-
-```typescript
-initWebStore() => Promise<void>
-```
-
-Init the web store
-
-**Since:** 3.2.3-1
-
---------------------
-
-
-### saveToStore(...)
-
-```typescript
-saveToStore(database: string) => Promise<void>
-```
-
-Save the datbase to the web store
-
-| Param          | Type                |
-| -------------- | ------------------- |
-| **`database`** | <code>string</code> |
-
-**Since:** 3.2.3-1
-
---------------------
-
 
 ### echo(...)
 
@@ -366,61 +331,6 @@ getDatabaseList() => Promise<capSQLiteValues>
 Get the database list
 
 **Returns:** <code>Promise&lt;<a href="#capsqlitevalues">capSQLiteValues</a>&gt;</code>
-
-**Since:** 3.0.0-beta.5
-
---------------------
-
-
-### getMigratableDbList(...)
-
-```typescript
-getMigratableDbList(folderPath: string) => Promise<capSQLiteValues>
-```
-
-Get the Migratable database list
-
-| Param            | Type                | Description                                  |
-| ---------------- | ------------------- | -------------------------------------------- |
-| **`folderPath`** | <code>string</code> | : string // only iOS & Android since 3.2.4-2 |
-
-**Returns:** <code>Promise&lt;<a href="#capsqlitevalues">capSQLiteValues</a>&gt;</code>
-
-**Since:** 3.0.0-beta.5
-
---------------------
-
-
-### addSQLiteSuffix(...)
-
-```typescript
-addSQLiteSuffix(folderPath?: string | undefined, dbNameList?: string[] | undefined) => Promise<void>
-```
-
-Add SQLIte Suffix to existing databases
-
-| Param            | Type                  | Description   |
-| ---------------- | --------------------- | ------------- |
-| **`folderPath`** | <code>string</code>   |               |
-| **`dbNameList`** | <code>string[]</code> | since 3.2.4-1 |
-
-**Since:** 3.0.0-beta.5
-
---------------------
-
-
-### deleteOldDatabases(...)
-
-```typescript
-deleteOldDatabases(folderPath?: string | undefined, dbNameList?: string[] | undefined) => Promise<void>
-```
-
-Delete Old Cordova databases
-
-| Param            | Type                  | Description   |
-| ---------------- | --------------------- | ------------- |
-| **`folderPath`** | <code>string</code>   |               |
-| **`dbNameList`** | <code>string[]</code> | since 3.2.4-1 |
 
 **Since:** 3.0.0-beta.5
 
