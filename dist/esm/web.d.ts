@@ -1,0 +1,35 @@
+import { WebPlugin } from '@capacitor/core';
+import type { CapacitorSQLitePlugin, capEchoOptions, capSQLiteOptions, capSQLiteExecuteOptions, capSQLiteSetOptions, capSQLiteRunOptions, capSQLiteQueryOptions, capSQLiteImportOptions, capSQLiteExportOptions, capSQLiteSyncDateOptions, capSQLiteUpgradeOptions, capSQLiteTableOptions, capSQLitePathOptions, capEchoResult, capVersionResult, capSQLiteResult, capSQLiteChanges, capSQLiteValues, capSQLiteJson, capSQLiteSyncDate, capAllConnectionsOptions, capSetSecretOptions, capChangeSecretOptions, capSQLiteFromAssetsOptions } from './definitions';
+export declare class CapacitorSQLiteWeb extends WebPlugin implements CapacitorSQLitePlugin {
+    echo(_options: capEchoOptions): Promise<capEchoResult>;
+    isSecretStored(): Promise<capSQLiteResult>;
+    setEncryptionSecret(_options: capSetSecretOptions): Promise<void>;
+    changeEncryptionSecret(_options: capChangeSecretOptions): Promise<void>;
+    createConnection(_options: capSQLiteOptions): Promise<void>;
+    open(_options: capSQLiteOptions): Promise<void>;
+    closeConnection(_options: capSQLiteOptions): Promise<void>;
+    getVersion(_options: capSQLiteOptions): Promise<capVersionResult>;
+    checkConnectionsConsistency(_options: capAllConnectionsOptions): Promise<capSQLiteResult>;
+    close(_options: capSQLiteOptions): Promise<void>;
+    execute(_options: capSQLiteExecuteOptions): Promise<capSQLiteChanges>;
+    executeSet(_options: capSQLiteSetOptions): Promise<capSQLiteChanges>;
+    run(_options: capSQLiteRunOptions): Promise<capSQLiteChanges>;
+    query(_options: capSQLiteQueryOptions): Promise<capSQLiteValues>;
+    isDBExists(_options: capSQLiteOptions): Promise<capSQLiteResult>;
+    isDBOpen(_options: capSQLiteOptions): Promise<capSQLiteResult>;
+    isDatabase(_options: capSQLiteOptions): Promise<capSQLiteResult>;
+    isTableExists(_options: capSQLiteTableOptions): Promise<capSQLiteResult>;
+    deleteDatabase(_options: capSQLiteOptions): Promise<void>;
+    isJsonValid(_options: capSQLiteImportOptions): Promise<capSQLiteResult>;
+    importFromJson(_options: capSQLiteImportOptions): Promise<capSQLiteChanges>;
+    exportToJson(_options: capSQLiteExportOptions): Promise<capSQLiteJson>;
+    createSyncTable(_options: capSQLiteOptions): Promise<capSQLiteChanges>;
+    setSyncDate(_options: capSQLiteSyncDateOptions): Promise<void>;
+    getSyncDate(_options: capSQLiteOptions): Promise<capSQLiteSyncDate>;
+    addUpgradeStatement(_options: capSQLiteUpgradeOptions): Promise<void>;
+    copyFromAssets(_options: capSQLiteFromAssetsOptions): Promise<void>;
+    getDatabaseList(): Promise<capSQLiteValues>;
+    getMigratableDbList(_options: capSQLitePathOptions): Promise<capSQLiteValues>;
+    addSQLiteSuffix(_options: capSQLitePathOptions): Promise<void>;
+    deleteOldDatabases(_options: capSQLitePathOptions): Promise<void>;
+}
