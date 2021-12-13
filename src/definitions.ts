@@ -621,19 +621,6 @@ export interface capSQLiteVersionUpgrade {
  */
 export interface ISQLiteConnection {
   /**
-   * Init the web store
-   * @returns Promise<void>
-   * @since 3.2.3-1
-   */
-  initWebStore(): Promise<void>;
-  /**
-   * Save the datbase to the web store
-   * @param database
-   * @returns Promise<void>
-   * @since 3.2.3-1
-   */
-  saveToStore(database: string): Promise<void>;
-  /**
    * Echo a value
    * @param value
    * @returns Promise<capEchoResult>
@@ -771,54 +758,14 @@ export interface ISQLiteConnection {
    * @since 3.0.0-beta.5
    */
   getDatabaseList(): Promise<capSQLiteValues>;
-  /**
-   * Get the Migratable database list
-   * @param folderPath: string // only iOS & Android since 3.2.4-2
-   * @returns Promise<capSQLiteValues>
-   * @since 3.0.0-beta.5
-   */
-  getMigratableDbList(folderPath: string): Promise<capSQLiteValues>;
-
-  /**
-   * Add SQLIte Suffix to existing databases
-   * @param folderPath
-   * @param dbNameList since 3.2.4-1
-   * @returns Promise<void>
-   * @since 3.0.0-beta.5
-   */
-  addSQLiteSuffix(folderPath?: string, dbNameList?: string[]): Promise<void>;
-  /**
-   * Delete Old Cordova databases
-   * @param folderPath
-   * @param dbNameList since 3.2.4-1
-   * @returns Promise<void>
-   * @since 3.0.0-beta.5
-   */
-  deleteOldDatabases(folderPath?: string, dbNameList?: string[]): Promise<void>;
 }
 /**
  * SQLiteConnection Class
  */
 export class SQLiteConnection implements ISQLiteConnection {
   private _connectionDict: Map<string, SQLiteDBConnection> = new Map();
-  constructor(private sqlite: any) {}
+  constructor(private sqlite: CapacitorSQLitePlugin) {}
 
-  async initWebStore(): Promise<void> {
-    try {
-      await this.sqlite.initWebStore();
-      return Promise.resolve();
-    } catch (err) {
-      return Promise.reject(err);
-    }
-  }
-  async saveToStore(database: string): Promise<void> {
-    try {
-      await this.sqlite.saveToStore({ database });
-      return Promise.resolve();
-    } catch (err) {
-      return Promise.reject(err);
-    }
-  }
   async echo(value: string): Promise<capEchoResult> {
     try {
       const res = await this.sqlite.echo({ value });
@@ -1000,51 +947,6 @@ export class SQLiteConnection implements ISQLiteConnection {
   async getDatabaseList(): Promise<capSQLiteValues> {
     try {
       const res = await this.sqlite.getDatabaseList();
-      return Promise.resolve(res);
-    } catch (err) {
-      return Promise.reject(err);
-    }
-  }
-  async getMigratableDbList(folderPath: string): Promise<capSQLiteValues> {
-    if (!folderPath || folderPath.length === 0) {
-      return Promise.reject('You must provide a folder path');
-    }
-    try {
-      const res = await this.sqlite.getMigratableDbList({
-        folderPath: folderPath,
-      });
-      return Promise.resolve(res);
-    } catch (err) {
-      return Promise.reject(err);
-    }
-  }
-  async addSQLiteSuffix(
-    folderPath?: string,
-    dbNameList?: string[],
-  ): Promise<void> {
-    const path: string = folderPath ? folderPath : 'default';
-    const dbList: string[] = dbNameList ? dbNameList : [];
-    try {
-      const res = await this.sqlite.addSQLiteSuffix({
-        folderPath: path,
-        dbNameList: dbList,
-      });
-      return Promise.resolve(res);
-    } catch (err) {
-      return Promise.reject(err);
-    }
-  }
-  async deleteOldDatabases(
-    folderPath?: string,
-    dbNameList?: string[],
-  ): Promise<void> {
-    const path: string = folderPath ? folderPath : 'default';
-    const dbList: string[] = dbNameList ? dbNameList : [];
-    try {
-      const res = await this.sqlite.deleteOldDatabases({
-        folderPath: path,
-        dbNameList: dbList,
-      });
       return Promise.resolve(res);
     } catch (err) {
       return Promise.reject(err);

@@ -165,19 +165,6 @@ class UtilsFile {
         }
     }
 
-    // MARK: - setPathSuffix
-
-    class func setPathSuffix(sDb: String ) -> String {
-        var toDb: String = sDb
-        let ext: String = ".db"
-        if sDb.hasSuffix(ext) {
-            if !sDb.contains("SQLite.db") {
-                toDb = sDb.prefix(sDb.count - ext.count) + "SQLite.db"
-            }
-        }
-        return toDb
-    }
-
     // MARK: - GetFileList
 
     class func getFileList(path: String, ext: String) throws -> [String] {
@@ -273,7 +260,7 @@ class UtilsFile {
                 throw UtilsFileError.unzipFromAssetToDatabaseFailed(message: msg)
             }
             for entry in archive {
-                let dbEntry = setPathSuffix(sDb: entry.path)
+                let dbEntry = entry.path
                 let zipCopy: URL = try getDatabasesUrl()
                     .appendingPathComponent(dbEntry)
                 do {
