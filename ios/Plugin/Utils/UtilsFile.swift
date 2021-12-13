@@ -80,11 +80,12 @@ class UtilsFile {
 
     class func getDatabasesUrl() throws -> URL {
         if let path: String = NSSearchPathForDirectoriesInDomains(
-            .documentDirectory, .userDomainMask, true
+            .libraryDirectory, .userDomainMask, true
         ).first {
-            return NSURL(fileURLWithPath: path) as URL
+            let url = NSURL(fileURLWithPath: path) as URL
+            return url.appendingPathComponent("LocalDatabase")
         } else {
-            print("Error: getDatabasesURL did not find the document folder")
+            print("Error: getDatabasesURL did not find the library folder")
             throw UtilsFileError.getDatabasesURLFailed
         }
     }
@@ -92,11 +93,11 @@ class UtilsFile {
     // MARK: - getDatabasesPath
     class func getDatabasesPath() throws -> String {
         if let path: String = NSSearchPathForDirectoriesInDomains(
-            .documentDirectory, .userDomainMask, true
+            .libraryDirectory, .userDomainMask, true
         ).first {
-            return path
+            return path + "/LocalDatabase"
         } else {
-            print("Error: getDatabasesPath did not find the document folder")
+            print("Error: getDatabasesPath did not find the library folder")
             throw UtilsFileError.getDatabasesPathFailed
         }
     }
